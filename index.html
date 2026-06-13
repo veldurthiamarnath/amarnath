@@ -1,0 +1,202 @@
+<!-- ADD THIS INSIDE <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- ADD BEFORE </body> -->
+
+<section class="auth-section">
+  <h2>Login / Signup</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="signup()">Signup</button>
+  <button onclick="login()">Login</button>
+</section>
+
+<section class="profile-section">
+  <h2>User Profile</h2>
+  <p id="userEmail">Not Logged In</p>
+</section>
+
+<section class="orders-section">
+  <h2>My Orders</h2>
+  <ul id="orders"></ul>
+</section>
+
+<section class="admin-section">
+  <h2>Admin Dashboard</h2>
+
+  <input type="text" id="adminProductName" placeholder="Product Name">
+  <input type="number" id="adminProductPrice" placeholder="Price">
+  <input type="text" id="adminProductImage" placeholder="Image URL">
+
+  <button onclick="adminAddProduct()">
+    Add Product
+  </button>
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_PROJECT.appspot.com",
+messagingSenderId:"XXXX",
+appId:"XXXX"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+window.signup = async () => {
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Signup Success");
+
+};
+
+window.login = async () => {
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+document.getElementById(
+"userEmail"
+).innerText = email;
+
+alert("Login Success");
+
+};
+
+window.adminAddProduct =
+async () => {
+
+const name =
+document.getElementById(
+"adminProductName"
+).value;
+
+const price =
+document.getElementById(
+"adminProductPrice"
+).value;
+
+const image =
+document.getElementById(
+"adminProductImage"
+).value;
+
+await addDoc(
+collection(db,"products"),
+{
+name,
+price,
+image
+}
+);
+
+alert("Product Added");
+
+};
+
+async function loadProducts(){
+
+const snapshot =
+await getDocs(
+collection(db,"products")
+);
+
+snapshot.forEach(doc=>{
+
+const p = doc.data();
+
+const card =
+document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<img src="${p.image}">
+
+<h3>${p.name}</h3>
+
+<p>₹${p.price}</p>
+
+<button onclick="buyNow()">
+Buy Now
+</button>
+
+`;
+
+document
+.getElementById("products")
+.appendChild(card);
+
+});
+
+}
+
+loadProducts();
+
+window.buyNow = () => {
+
+alert(
+"Connect Razorpay / Stripe Here"
+);
+
+let li =
+document.createElement("li");
+
+li.innerText =
+"Order Placed (Demo)";
+
+document
+.getElementById("orders")
+.appendChild(li);
+
+};
+
+</script>
