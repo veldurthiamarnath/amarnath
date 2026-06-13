@@ -200,3 +200,193 @@ document
 };
 
 </script>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#121212;
+color:white;
+}
+
+header{
+background:#000;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:#ff6b00;
+}
+
+.hero{
+text-align:center;
+padding:40px;
+}
+
+.hero h1{
+font-size:50px;
+color:#ff6b00;
+}
+
+input{
+padding:10px;
+border:none;
+border-radius:20px;
+width:250px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:#1e1e1e;
+border-radius:15px;
+padding:15px;
+text-align:center;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+margin:5px;
+}
+
+.cart{
+background:#ff6b00;
+color:white;
+}
+
+.buy{
+background:#28a745;
+color:white;
+}
+
+.wish{
+background:#e91e63;
+color:white;
+}
+
+.panel{
+background:#1b1b1b;
+margin:20px;
+padding:20px;
+border-radius:15px;
+}
+
+footer{
+background:black;
+text-align:center;
+padding:20px;
+margin-top:20px;
+}
+
+@media(max-width:768px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+let products=[
+{
+name:"MRF Bat",
+price:2999,
+img:"https://picsum.photos/300/200?1"
+},
+{
+name:"SRH Jersey",
+price:1499,
+img:"https://picsum.photos/300/200?2"
+},
+{
+name:"Cricket Shoes",
+price:1999,
+img:"https://picsum.photos/300/200?3"
+}
+];
+
+let cart=[];
+let wishlist=[];
+
+function renderProducts(){
+
+const productsDiv=
+document.getElementById("products");
+
+if(!productsDiv) return;
+
+productsDiv.innerHTML="";
+
+products.forEach(p=>{
+
+productsDiv.innerHTML+=`
+
+<div class="card">
+
+<img src="${p.img}">
+
+<h3>${p.name}</h3>
+
+<p>₹${p.price}</p>
+
+<button class="cart"
+onclick="addCart('${p.name}',${p.price})">
+Add Cart
+</button>
+
+<button class="wish"
+onclick="addWish('${p.name}')">
+Wishlist
+</button>
+
+<button class="buy"
+onclick="buyNow('${p.name}')">
+Buy Now
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+function addCart(name,price){
+
+cart.push({name,price});
+
+alert(name+" Added To Cart");
+
+}
+
+function addWish(name){
+
+wishlist.push(name);
+
+alert(name+" Added To Wishlist");
+
+}
+
+function buyNow(name){
+
+alert(
+"Buying "+name+
+" (Demo Mode)"
+);
+
+}
+
+window.onload=renderProducts;
